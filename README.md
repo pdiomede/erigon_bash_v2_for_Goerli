@@ -9,7 +9,7 @@ If you dont currently have rust installed, log out and back in after install.
 
 
 ### **Download install.sh** ###
-`git clone https://github.com/kw1knode/erigon_bash_v2.git`
+`git clone https://github.com/pdiomede/erigon_bash_v2_for_Goerli`
 
 `cd erigon_bash_v2`
 
