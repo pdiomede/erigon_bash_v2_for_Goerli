@@ -21,6 +21,9 @@ If you dont currently have rust installed, log out and back in after install.
 
 Is checkpoint sync less secure? No, in fact it is more secure! Checkpoint sync guards against long-range attacks that genesis sync does not. This is due to a property of Proof of Stake consensus known as Weak Subjectivity.
 
+In order to setup your url above, you can use a service like Alchemy:
+https://www.alchemy.com/
+
 
 ### **Run install.sh** ###
 `./install.sh`
