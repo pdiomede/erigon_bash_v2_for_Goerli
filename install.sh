@@ -8,7 +8,6 @@ sudo mkdir -p /var/lib/jwtsecret
 openssl rand -hex 32 | sudo tee /var/lib/jwtsecret/jwt.hex > /dev/null
 
 
-
 #Golang
 cd ~
 curl -LO https://go.dev/dl/go1.19.linux-amd64.tar.gz
@@ -18,12 +17,14 @@ export PATH=$PATH:/usr/local/go/bin
 source $HOME/.profile
 rm go1.19.linux-amd64.tar.gz
 
+
 #Erigon
 cd ~
 curl -LO https://github.com/ledgerwatch/erigon/archive/refs/tags/v2022.09.02.tar.gz
 tar xvf v2022.09.02.tar.gz
 cd erigon-2022.09.02
 make erigon
+
 cd ~
 sudo cp -a erigon-2022.09.02 /usr/local/bin/erigon
 rm v2022.09.02.tar.gz
@@ -31,6 +32,7 @@ rm -r erigon-2022.09.02
 sudo useradd --no-create-home --shell /bin/false erigon
 sudo mkdir -p /var/lib/erigon
 sudo chown -R erigon:erigon /var/lib/erigon
+
 
 echo "[Unit]
 Description=Erigon Execution Client (Goerli)
@@ -44,6 +46,7 @@ Restart=always
 RestartSec=5
 ExecStart=/usr/local/bin/erigon/build/bin/erigon \
   --datadir=/var/lib/erigon \
+  --chain=goerli \
   --rpc.gascap=50000000 \
   --http \
   --ws \
