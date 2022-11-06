@@ -1,4 +1,4 @@
-Erigon Archive + Lighthouse Beacon Install
+Erigon Archive + Lighthouse Beacon Install (for Goerli)
 ========================================================
 ### **Install Rust** ###
 
