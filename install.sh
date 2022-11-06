@@ -1,14 +1,14 @@
 #!/bin/bash
 apt update -y && apt upgrade -y && apt autoremove -y
 
-#Prerequisites
+# Prerequisites
 sudo apt-get install -y build-essential
 
 sudo mkdir -p /var/lib/jwtsecret
 openssl rand -hex 32 | sudo tee /var/lib/jwtsecret/jwt.hex > /dev/null
 
 
-#Golang
+# Golang
 cd ~
 curl -LO https://go.dev/dl/go1.19.linux-amd64.tar.gz
 sudo rm -rf /usr/local/go
@@ -18,7 +18,8 @@ source $HOME/.profile
 rm go1.19.linux-amd64.tar.gz
 
 
-#Erigon
+# Erigon
+
 cd ~
 curl -LO https://github.com/ledgerwatch/erigon/archive/refs/tags/v2022.09.02.tar.gz
 tar xvf v2022.09.02.tar.gz
@@ -65,7 +66,7 @@ ExecStart=/usr/local/bin/erigon/build/bin/erigon \
 WantedBy=default.target" >> /etc/systemd/system/erigon.service \
 
 
-#Lighthouse Beacon
+# Lighthouse Beacon
 
 cd ~
 curl -LO https://github.com/sigp/lighthouse/releases/download/v3.1.0/lighthouse-v3.1.0-x86_64-unknown-linux-gnu.tar.gz
@@ -93,11 +94,12 @@ ExecStart=/usr/local/bin/lighthouse bn \
   --http \
   --execution-endpoint http://localhost:8551 \
   --execution-jwt /var/lib/jwtsecret/jwt.hex \
-  --checkpoint-sync-url https://<PROJECT-ID>:<PROJECT-SECRET>@eth2-beacon-mainnet.infura.io \
   --metrics
 [Install]
 WantedBy=multi-user.target" >> /etc/systemd/system/lighthousebeacon.service \
 
+
+# Install and launch services
 
 sudo systemctl daemon-reload
 sudo systemctl start erigon
