@@ -33,7 +33,7 @@ sudo mkdir -p /var/lib/erigon
 sudo chown -R erigon:erigon /var/lib/erigon
 
 echo "[Unit]
-Description=Erigon Execution Client (Mainnet)
+Description=Erigon Execution Client (Goerli)
 After=network.target
 Wants=network.target
 [Service]
@@ -75,7 +75,7 @@ sudo mkdir -p /var/lib/lighthouse/beacon
 sudo chown -R lighthousebeacon:lighthousebeacon /var/lib/lighthouse/beacon
 
 echo "[Unit]
-Description=Lighthouse Consensus Client BN (Mainnet)
+Description=Lighthouse Consensus Client BN (Goerli)
 Wants=network-online.target
 After=network-online.target
 [Service]
@@ -85,7 +85,7 @@ Type=simple
 Restart=always
 RestartSec=5
 ExecStart=/usr/local/bin/lighthouse bn \
-  --network mainnet \
+  --network goerli \
   --datadir /var/lib/lighthouse \
   --http \
   --execution-endpoint http://localhost:8551 \
@@ -94,8 +94,6 @@ ExecStart=/usr/local/bin/lighthouse bn \
   --metrics
 [Install]
 WantedBy=multi-user.target" >> /etc/systemd/system/lighthousebeacon.service \
-
-
 
 
 sudo systemctl daemon-reload
