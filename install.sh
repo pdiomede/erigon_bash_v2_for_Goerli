@@ -24,8 +24,6 @@ git clone --recurse-submodules -j8 https://github.com/ledgerwatch/erigon.git
 cd erigon
 make erigon
 
-#nohup ./build/bin/erigon --datadir=datagoerli --chain=goerli
-
 cd ~
 sudo cp -a erigon /usr/local/bin/erigon
 rm -r erigon
