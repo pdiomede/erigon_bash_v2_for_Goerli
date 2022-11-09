@@ -3,12 +3,11 @@ apt update -y && apt upgrade -y && apt autoremove -y
 
 # Prerequisites
 sudo apt-get install -y build-essential
-
 sudo mkdir -p /var/lib/jwtsecret
 openssl rand -hex 32 | sudo tee /var/lib/jwtsecret/jwt.hex > /dev/null
 
 
-# Golang
+# Golang (if needed)
 cd ~
 curl -LO https://go.dev/dl/go1.19.linux-amd64.tar.gz
 sudo rm -rf /usr/local/go
@@ -21,19 +20,21 @@ rm go1.19.linux-amd64.tar.gz
 # Erigon
 
 cd ~
-curl -LO https://github.com/ledgerwatch/erigon/archive/refs/tags/v2022.09.02.tar.gz
-tar xvf v2022.09.02.tar.gz
-cd erigon-2022.09.02
+git clone --recurse-submodules -j8 https://github.com/ledgerwatch/erigon.git
+cd erigon
 make erigon
 
+#nohup ./build/bin/erigon --datadir=datagoerli --chain=goerli
+
 cd ~
-sudo cp -a erigon-2022.09.02 /usr/local/bin/erigon
-rm v2022.09.02.tar.gz
-rm -r erigon-2022.09.02
+sudo cp -a erigon /usr/local/bin/erigon
+rm -r erigon
 sudo useradd --no-create-home --shell /bin/false erigon
 sudo mkdir -p /var/lib/erigon
 sudo chown -R erigon:erigon /var/lib/erigon
 
+
+# Add Erigon service
 
 echo "[Unit]
 Description=Erigon Execution Client (Goerli)
@@ -46,7 +47,7 @@ Type=simple
 Restart=always
 RestartSec=5
 ExecStart=/usr/local/bin/erigon/build/bin/erigon \
-  --datadir=/var/lib/erigon \
+  --datadir=/var/lib/erigondata \
   --chain=goerli \
   --rpc.gascap=50000000 \
   --http \
@@ -69,14 +70,17 @@ WantedBy=default.target" >> /etc/systemd/system/erigon.service \
 # Lighthouse Beacon
 
 cd ~
-curl -LO https://github.com/sigp/lighthouse/releases/download/v3.1.0/lighthouse-v3.1.0-x86_64-unknown-linux-gnu.tar.gz
-tar xvf lighthouse-v3.1.0-x86_64-unknown-linux-gnu.tar.gz
+curl -LO https://github.com/sigp/lighthouse/releases/download/v3.2.1/lighthouse-v3.2.1-x86_64-unknown-linux-gnu.tar.gz
+tar xvf lighthouse-v3.2.1-x86_64-unknown-linux-gnu.tar.gz
 sudo cp lighthouse /usr/local/bin
-rm lighthouse-v3.1.0-x86_64-unknown-linux-gnu.tar.gz
+rm lighthouse-v3.2.1-x86_64-unknown-linux-gnu.tar.gz
 rm lighthouse
 sudo useradd --no-create-home --shell /bin/false lighthousebeacon
 sudo mkdir -p /var/lib/lighthouse/beacon
 sudo chown -R lighthousebeacon:lighthousebeacon /var/lib/lighthouse/beacon
+
+
+# Add Lighthouse service
 
 echo "[Unit]
 Description=Lighthouse Consensus Client BN (Goerli)
